@@ -30,11 +30,23 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith('/login') || pathname.startsWith('/auth/');
 
   if (!user && !isPublicPath) {
-    return NextResponse.redirect(new URL('/login', request.url));
+    const redirectResponse = NextResponse.redirect(
+      new URL('/login', request.url),
+    );
+    supabaseResponse.cookies
+      .getAll()
+      .forEach((c) => redirectResponse.cookies.set(c.name, c.value));
+    return redirectResponse;
   }
 
   if (user && pathname.startsWith('/login')) {
-    return NextResponse.redirect(new URL('/', request.url));
+    const redirectResponse = NextResponse.redirect(
+      new URL('/', request.url),
+    );
+    supabaseResponse.cookies
+      .getAll()
+      .forEach((c) => redirectResponse.cookies.set(c.name, c.value));
+    return redirectResponse;
   }
 
   return supabaseResponse;
