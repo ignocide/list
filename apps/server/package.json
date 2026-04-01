@@ -44,8 +44,8 @@
     "testRegex": ".*\\.spec\\.ts$",
     "transform": { "^.+\\.(t|j)s$": "ts-jest" },
     "moduleNameMapper": {
-      "^@nook/trpc$": "<rootDir>/../../packages/trpc/src/index.ts",
-      "^@nook/types$": "<rootDir>/../../packages/types/src/index.ts"
+      "^@nook/trpc$": "<rootDir>/../../../packages/trpc/src/index.ts",
+      "^@nook/types$": "<rootDir>/../../../packages/types/src/index.ts"
     },
     "testEnvironment": "node"
   }
