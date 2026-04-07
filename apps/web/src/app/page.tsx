@@ -1,12 +1,23 @@
-export default function HomePage() {
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold">Nook</h1>
-        <p className="text-gray-500 mt-2 text-sm">
-          Core 플랜에서 메모 기능이 추가됩니다.
-        </p>
-      </div>
-    </div>
-  );
+import { redirect } from 'next/navigation';
+import { createClient } from '@/lib/supabase/server';
+
+export default async function HomePage() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) redirect('/login');
+
+  const { data: prefs } = await supabase
+    .from('user_preferences')
+    .select('last_notebook_id')
+    .eq('user_id', user.id)
+    .maybeSingle();
+
+  if (prefs?.last_notebook_id) {
+    redirect(`/notebook/${prefs.last_notebook_id}`);
+  }
+
+  redirect('/notebook/unclassified');
 }
