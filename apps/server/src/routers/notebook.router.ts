@@ -54,11 +54,13 @@ export function createNotebookRouter(supabaseService: SupabaseService) {
         }),
       )
       .mutation(async ({ ctx, input }) => {
-        const { id, ...fields } = input;
+        const patch: Record<string, unknown> = { updated_at: new Date().toISOString() };
+        if (input.name !== undefined) patch.name = input.name;
+        if (input.color !== undefined) patch.color = input.color;
         const { data, error } = await supabaseService.client
           .from('notebooks')
-          .update({ ...fields, updated_at: new Date().toISOString() })
-          .eq('id', id)
+          .update(patch)
+          .eq('id', input.id)
           .eq('user_id', ctx.user.sub)
           .select()
           .single();

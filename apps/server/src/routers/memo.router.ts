@@ -46,7 +46,8 @@ export function createMemoRouter(supabaseService: SupabaseService) {
           .eq('id', input.id)
           .eq('user_id', ctx.user.sub)
           .single();
-        if (error) throw new TRPCError({ code: 'NOT_FOUND', message: 'Memo not found' });
+        if (error) throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: error.message });
+        if (!data) throw new TRPCError({ code: 'NOT_FOUND', message: 'Memo not found' });
         return toMemo(data as Record<string, unknown>);
       }),
 
