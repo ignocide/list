@@ -1,2 +1,2 @@
-export { extractTitle, extractPreview } from './markdown';
+export { extractTitle, extractPreview } from './tiptap';
 export { formatDateHeader } from './date';
