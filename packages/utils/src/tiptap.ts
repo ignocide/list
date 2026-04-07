@@ -1,6 +1,8 @@
-function extractText(node: { text?: string; content?: object[] }): string {
-  if (node.text) return node.text;
-  if (node.content) return node.content.map(extractText as any).join('');
+type TipTapNode = { text?: string; content?: TipTapNode[] };
+
+function extractText(node: TipTapNode): string {
+  if (typeof node.text === 'string') return node.text;
+  if (node.content) return node.content.map(extractText).join('');
   return '';
 }
 
@@ -20,9 +22,9 @@ export function extractPreview(content: string): string {
   if (!content) return '';
   try {
     const doc = JSON.parse(content);
-    const nodes: object[] = doc?.content ?? [];
+    const nodes: TipTapNode[] = doc?.content ?? [];
     for (let i = 1; i < nodes.length; i++) {
-      const text = extractText(nodes[i] as any);
+      const text = extractText(nodes[i]);
       if (text) return text.length > 80 ? text.slice(0, 80) + '…' : text;
     }
     return '';
