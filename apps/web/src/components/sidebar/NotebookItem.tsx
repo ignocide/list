@@ -14,7 +14,7 @@ export function NotebookItem({ notebook, active }: { notebook: Notebook; active:
     <div className="relative">
       <Link
         href={`/notebook/${notebook.id}`}
-        onClick={() => updatePrefs.mutate({ lastNotebookId: notebook.id })}
+        onClick={() => { if (!active) updatePrefs.mutate({ lastNotebookId: notebook.id }); }}
         onContextMenu={(e) => { e.preventDefault(); setMenuOpen(true); }}
         className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
           active ? 'bg-gray-200 text-gray-900 font-medium' : 'text-gray-600 hover:bg-gray-100'

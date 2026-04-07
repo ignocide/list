@@ -10,7 +10,7 @@ import { SaveIndicator } from './SaveIndicator';
 
 type SaveStatus = 'idle' | 'saving' | 'saved';
 
-export function MemoEditor({ memoId, initialContent }: { memoId: string; initialContent: string }) {
+export function MemoEditor({ memoId, initialContent, notebookId }: { memoId: string; initialContent: string; notebookId: string | null }) {
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastSaved = useRef(initialContent);
@@ -19,7 +19,7 @@ export function MemoEditor({ memoId, initialContent }: { memoId: string; initial
   const updateMemo = trpc.memo.update.useMutation({
     onSuccess: () => {
       setSaveStatus('saved');
-      utils.memo.list.invalidate();
+      utils.memo.list.invalidate({ notebookId });
     },
   });
 
@@ -28,7 +28,11 @@ export function MemoEditor({ memoId, initialContent }: { memoId: string; initial
       StarterKit,
       Placeholder.configure({ placeholder: '메모를 입력하세요...' }),
     ],
-    content: initialContent ? (JSON.parse(initialContent) as object) : '',
+    content: (() => {
+      if (!initialContent) return '';
+      try { return JSON.parse(initialContent) as object; }
+      catch { return initialContent; }
+    })(),
     onUpdate: ({ editor }) => {
       const json = JSON.stringify(editor.getJSON());
       if (json === lastSaved.current) return;

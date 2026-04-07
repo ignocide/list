@@ -65,7 +65,8 @@ export function NotebookContextMenu({
       </button>
       <button
         onClick={() => deleteNotebook.mutate({ id: notebook.id })}
-        className="w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 text-left"
+        disabled={deleteNotebook.isPending}
+        className="w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 text-left disabled:opacity-50"
       >
         삭제
       </button>

@@ -41,7 +41,8 @@ export function MemoContextMenu({
     >
       <button
         onClick={() => deleteMemo.mutate({ id: memoId })}
-        className="w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 text-left"
+        disabled={deleteMemo.isPending}
+        className="w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 text-left disabled:opacity-50"
       >
         삭제
       </button>

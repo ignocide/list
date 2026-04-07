@@ -51,7 +51,7 @@ export function NotebookCreateModal({ onClose }: { onClose: () => void }) {
           </button>
           <button
             onClick={() => name.trim() && createNotebook.mutate({ name: name.trim(), color })}
-            disabled={!name.trim()}
+            disabled={!name.trim() || createNotebook.isPending}
             className="px-4 py-2 text-sm bg-gray-900 text-white rounded-lg disabled:opacity-40"
           >
             만들기
